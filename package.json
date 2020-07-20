@@ -1,0 +1,4 @@
+{
+    "private": true,
+    "workspaces": ["anais-coletta-coaching-client", "anais-coletta-coaching-admin", "anais-coletta-coaching-api"]
+}

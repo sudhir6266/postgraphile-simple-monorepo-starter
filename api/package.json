@@ -1,0 +1,39 @@
+{
+  "name": "anais-coletta-coaching-api",
+  "version": "1.0.0",
+  "description": "Backend for Anaïs Coletta Coaching website",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+    "start:watch": "nodemon --watch 'src/**/*.ts' --exec 'node --inspect=5858 -r ts-node/register' ./src/server.ts",
+    "migrate": "graphile-migrate migrate",
+    "migrate-shadow": "graphile-migrate migrate --shadow",
+    "migrate-commit": "graphile-migrate commit",
+    "migrate-uncommit": "graphile-migrate uncommit",
+    "migrate-reset": "graphile-migrate reset",
+    "migrate-watch": "graphile-migrate watch"
+  },
+  "author": "Léo Coletta",
+  "license": "ISC",
+  "dependencies": {
+    "@graphile-contrib/pg-simplify-inflector": "^6.0.0",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.1",
+    "graphile-build": "^4.7.0",
+    "graphile-build-pg": "^4.7.0",
+    "graphile-migrate": "^0.3.1",
+    "graphql": "^14.0.2",
+    "pg": "^8.3.0",
+    "postgraphile": "^4.7.0",
+    "postgraphile-plugin-connection-filter": "^2.0.0",
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.23",
+    "eslint": "^7.4.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2"
+  }
+}

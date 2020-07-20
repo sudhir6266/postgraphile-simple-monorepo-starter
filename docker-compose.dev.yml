@@ -1,0 +1,117 @@
+version: '3.3'
+
+
+services:
+  database:
+    image: "postgres"
+    restart: "always"
+    environment:
+      POSTGRES_USER: anais_coletta_coaching_postgres
+      POSTGRES_PASSWORD: anais_password
+      POSTGRES_MULTIPLE_DATABASES: anais_coletta_coaching,anais_coletta_coaching_shadow
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+      - ./docker/pg-init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    networks:
+      - nginx
+    expose: ['5432']
+
+  migrate-watch:
+    image: "node:12"
+    restart: "always"
+    working_dir: /usr/app
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching"
+      SHADOW_DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching_shadow"
+      ROOT_DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/postgres"
+      WAIT_HOSTS: database:5432
+    volumes:
+      - ./api:/usr/app
+      - /usr/app/node_modules
+      - ./docker/wait-postgresql:/usr/scripts
+    networks:
+      - nginx
+    command:  bash -c "yarn && /usr/scripts/wait && yarn run migrate && yarn run migrate-shadow && yarn run migrate-watch"
+
+  api:
+    image: "node:12"
+    restart: "always"
+    working_dir: /usr/app
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching"
+      PORT: 3002
+      APP_ENV: dev
+      WAIT_HOSTS: database:5432
+    volumes:
+      - ./api:/usr/app
+      - /usr/app/node_modules
+      - ./docker/wait-postgresql:/usr/scripts
+    expose: ['3002']
+    networks:
+      - nginx
+    command:  bash -c "yarn && /usr/scripts/wait && yarn start:watch"
+
+  webapp:
+    image: "node:12"
+    restart: "always"
+    working_dir: /usr/app
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+    volumes:
+      - ./client:/usr/app
+      - /usr/app/node_modules
+      - /usr/app/.nuxt
+      - webapp_static:/user/app/static
+    command: bash -c "yarn && yarn run dev"
+    networks:
+      - nginx
+    expose: ['3000']
+
+  admin:
+    image: "node:12"
+    restart: "always"
+    working_dir: /usr/app
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3001
+    volumes:
+      - ./admin:/usr/app
+      - /usr/app/node_modules
+      - /usr/app/.nuxt
+      - admin_static:/user/app/static
+    command: bash -c "yarn && yarn run dev"
+    networks:
+      - nginx
+    expose: ['3001']
+
+  nginx:
+    networks:
+      - nginx
+    image: nginx:alpine
+    ports:
+      - 9000:9000
+      - 9001:9001
+      - 9002:9002
+    volumes:
+      - ./docker/nginx/dev/nginx.conf:/etc/nginx/nginx.conf
+      - ./log/nginx:/var/log/nginx
+      - webapp_static:/usr/share/nginx/html/webapp
+      - admin_static:/usr/share/nginx/html/admin
+    depends_on:
+      - webapp
+      - admin
+      - api
+
+networks:
+  nginx:
+
+volumes:
+  webapp_static: {}
+  admin_static: {}
