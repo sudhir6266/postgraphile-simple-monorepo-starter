@@ -1,0 +1,22 @@
+{
+  "name": "anais-coletta-coaching-api",
+  "version": "1.0.0",
+  "description": "Backend for Anaïs Coletta Coaching website",
+  "main": "index.ts",
+  "scripts": {
+    "migrate": "graphile-migrate migrate",
+    "migrate-shadow": "graphile-migrate migrate --shadow",
+    "migrate-commit": "graphile-migrate commit",
+    "migrate-uncommit": "graphile-migrate uncommit",
+    "migrate-reset": "graphile-migrate reset",
+    "migrate-watch": "graphile-migrate watch"
+  },
+  "author": "Léo Coletta",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "graphile-migrate": "^0.3.1"
+  },
+  "devDependencies": {
+  }
+}

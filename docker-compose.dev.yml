@@ -6,9 +6,9 @@ services:
     image: "postgres"
     restart: "always"
     environment:
-      POSTGRES_USER: anais_coletta_coaching_postgres
-      POSTGRES_PASSWORD: anais_password
-      POSTGRES_MULTIPLE_DATABASES: anais_coletta_coaching,anais_coletta_coaching_shadow
+      POSTGRES_USER: main_user
+      POSTGRES_PASSWORD: main_password
+      POSTGRES_MULTIPLE_DATABASES: main, main_shadow, keycloak
     volumes:
       - ./db-data:/var/lib/postgresql/data
       - ./docker/pg-init-scripts:/docker-entrypoint-initdb.d
@@ -18,6 +18,24 @@ services:
       - nginx
     expose: ['5432']
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: database
+      DB_DATABASE: keycloak
+      DB_USER: main_user
+      DB_SCHEMA: public
+      DB_PASSWORD: main_password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: 123456789
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    networks:
+      - nginx
+
   migrate-watch:
     image: "node:12"
     restart: "always"
@@ -25,12 +43,13 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching"
-      SHADOW_DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching_shadow"
-      ROOT_DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/postgres"
+      DATABASE_URL: "postgres://main_user:main_password@database:5432/main"
+      SHADOW_DATABASE_URL: "postgres://main_user:main_password@database:5432/main_shadow"
+      ROOT_DATABASE_URL: "postgres://main_user:main_password@database:5432/postgres"
       WAIT_HOSTS: database:5432
+      WAIT_HOSTS_TIMEOUT: 300
     volumes:
-      - ./api:/usr/app
+      - ./database:/usr/app
       - /usr/app/node_modules
       - ./docker/wait-postgresql:/usr/scripts
     networks:
@@ -44,10 +63,11 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgres://anais_coletta_coaching_postgres:anais_password@database:5432/anais_coletta_coaching"
+      DATABASE_URL: "postgres://main_user:main_password@database:5432/main"
       PORT: 3002
       APP_ENV: dev
       WAIT_HOSTS: database:5432
+      WAIT_HOSTS_TIMEOUT: 300
     volumes:
       - ./api:/usr/app
       - /usr/app/node_modules
