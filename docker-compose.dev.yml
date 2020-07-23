@@ -19,7 +19,7 @@ services:
     expose: ['5432']
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: "jboss/keycloak"
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: database
@@ -29,6 +29,10 @@ services:
       DB_PASSWORD: main_password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: 123456789
+      KEYCLOAK_IMPORT: /tmp/keycloak/administration-realm.json,/tmp/keycloak/user-realm.json
+    volumes:
+    - ./keycloak:/tmp/keycloak/
+    - ./docker/wait-postgresql:/usr/scripts
     ports:
       - 8080:8080
     depends_on:

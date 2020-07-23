@@ -15,6 +15,7 @@ Service being one of :
 - webapp
 - database
 - nginx
+- keycloak
 
 And command, the command you wish to execute.
 
