@@ -1,14 +1,13 @@
-version: '3.3'
-
+version: '3'
 
 services:
   database:
     image: "postgres"
     restart: "always"
     environment:
-      POSTGRES_USER: main_user
-      POSTGRES_PASSWORD: main_password
-      POSTGRES_MULTIPLE_DATABASES: main, main_shadow, keycloak
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: ${MAIN_DATABASE}, ${SHADOW_DATABASE}, ${KEYCLOAK_DATABASE}
     volumes:
       - ./db-data:/var/lib/postgresql/data
       - ./docker/pg-init-scripts:/docker-entrypoint-initdb.d
@@ -23,13 +22,13 @@ services:
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: database
-      DB_DATABASE: keycloak
-      DB_USER: main_user
+      DB_DATABASE: ${KEYCLOAK_DATABASE}
+      DB_USER: ${DATABASE_USER}
       DB_SCHEMA: public
-      DB_PASSWORD: main_password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: 123456789
-      KEYCLOAK_IMPORT: /tmp/keycloak/administration-realm.json,/tmp/keycloak/user-realm.json
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_IMPORT: /tmp/keycloak/APP-realm.json
     volumes:
     - ./keycloak:/tmp/keycloak/
     - ./docker/wait-postgresql:/usr/scripts
@@ -47,9 +46,9 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgres://main_user:main_password@database:5432/main"
-      SHADOW_DATABASE_URL: "postgres://main_user:main_password@database:5432/main_shadow"
-      ROOT_DATABASE_URL: "postgres://main_user:main_password@database:5432/postgres"
+      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
+      SHADOW_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${SHADOW_DATABASE}"
+      ROOT_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/postgres"
       WAIT_HOSTS: database:5432
       WAIT_HOSTS_TIMEOUT: 300
     volumes:
@@ -67,7 +66,7 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgres://main_user:main_password@database:5432/main"
+      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
       PORT: 3002
       APP_ENV: dev
       WAIT_HOSTS: database:5432
