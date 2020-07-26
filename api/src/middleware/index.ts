@@ -1,8 +1,10 @@
 import postgraphile from "./postgraphile";
-import {HttpRequestHandler} from "postgraphile/build/interfaces";
+import {authenticationMiddleware} from "./authentication";
+import {RequestHandler} from "express";
 
-const middlewares: Array<HttpRequestHandler> = [
-    postgraphile
+const middlewares: Array<RequestHandler> = [
+    authenticationMiddleware,
+    postgraphile,
 ];
 
 export default middlewares;

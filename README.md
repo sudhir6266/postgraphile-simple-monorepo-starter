@@ -21,13 +21,13 @@ And command, the command you wish to execute.
 
 For instance, here is some exemple of commands you might have to use often :
 
-- Commit : `docker-compose -f "docker-compose.dev.yml" exec migrate-watch yarn run migrate-commit`
+- Commit : `docker-compose -f "docker-compose.yml" exec migrate-watch yarn run migrate-commit`
 
-- Uncommit : `docker-compose -f "docker-compose.dev.yml" exec migrate-watch yarn run migrate-commit`
+- Uncommit : `docker-compose -f "docker-compose.yml" exec migrate-watch yarn run migrate-commit`
 
-- Reset : `docker-compose -f "docker-compose.dev.yml" exec migrate-watch yarn run migrate-commit`
+- Reset : `docker-compose -f "docker-compose.yml" exec migrate-watch yarn run migrate-commit`
 
-- Add lodash to webapp : `docker-compose -f "docker-compose.dev.yml" exec webapp yarn add lodash`
+- Add lodash to webapp : `docker-compose -f "docker-compose.yml" exec webapp yarn add lodash`
 
 # TODO
 

@@ -5,6 +5,20 @@ import { IncomingMessage } from 'http';
 // @ts-ignore
 import ConnectionFilterPlugin from 'postgraphile-plugin-connection-filter';
 
+const pgSettings = function (req: IncomingMessage) {
+    const settings: {'role'?: string, 'user.role'?: string, 'user.email'?: string} = {role: 'anonymous', 'user.role': 'anonymous'};
+    // @ts-ignore
+    const user = req.user;
+    if (user) {
+        settings["role"] = user.permission;
+        settings["user.role"] = user.permission;
+        settings["user.email"] = user.email;
+    }
+
+    console.log(settings, user);
+    return settings;
+}
+
 const devOptions: PostGraphileOptions = {
     subscriptions: true,
     watchPg: true,
@@ -23,9 +37,7 @@ const devOptions: PostGraphileOptions = {
     },
     enableQueryBatching: true,
     legacyRelations: "omit",
-    pgSettings(req: IncomingMessage) {
-        return {};
-    },
+    pgSettings,
 };
 
 const productionOptions: PostGraphileOptions = {
@@ -41,13 +53,11 @@ const productionOptions: PostGraphileOptions = {
     enableQueryBatching: true,
     disableQueryLog: true, // our default logging has performance issues, but do make sure you have a logging system in place!
     legacyRelations: "omit",
-    pgSettings(req: IncomingMessage) {
-        return {};
-    },
+    pgSettings,
 }
 
 export default postgraphile(
-    process.env.DATABASE_URL || "postgres://postgres:root@localhost:5433/anais_coletta_coaching",
+    process.env.DATABASE_URL || "postgres://postgres:root@localhost:5433/main",
     "public",
     process.env.APP_ENV === 'production' ? productionOptions : devOptions
 );
