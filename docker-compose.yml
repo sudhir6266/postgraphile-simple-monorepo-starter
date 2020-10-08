@@ -82,6 +82,9 @@ services:
     environment:
       - NUXT_HOST=0.0.0.0
       - NUXT_PORT=3001
+      - APP_ENV=dev
+      - "API_HTTP_URL=http://localhost:${API_PORT}"
+      - "API_WS_URL=ws://localhost:${API_PORT}"
     volumes:
       - ./admin:/usr/app
       - /usr/app/node_modules
@@ -99,7 +102,7 @@ services:
     ports:
       - 9000:9000
       - 9001:9001
-      - 9002:9002
+      - "${API_PORT}:${API_PORT}"
     volumes:
       - ./docker/nginx/dev/nginx.conf:/etc/nginx/nginx.conf
       - ./log/nginx:/var/log/nginx

@@ -1,0 +1,11 @@
+query UsersList($itemsPerPage: Int, $offset: Int, $orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]) {
+  users(first: $itemsPerPage, offset: $offset, orderBy: $orderBy) {
+    nodes {
+      id
+      email
+      role
+      nodeId
+    }
+    totalCount
+  }
+}

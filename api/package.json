@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@graphile-contrib/pg-simplify-inflector": "^6.0.0",
+    "@graphile/pg-pubsub": "^4.7.0",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
