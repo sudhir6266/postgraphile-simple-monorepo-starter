@@ -1,0 +1,10 @@
+mutation Login($email: String!, $password: String!) {
+  authenticate(input: {emailAddress: $email, userPassword: $password}) {
+    jwtPayload {
+      token,
+      exp,
+      email,
+      permission
+    }
+  }
+}

@@ -23,9 +23,26 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.4.10",
+    "@nuxtjs/apollo": "^4.0.1-rc.3",
     "@nuxtjs/axios": "^5.11.0",
+    "@nuxtjs/proxy": "^2.0.1",
+    "@vue/cli-shared-utils": "^4.4.6",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link": "^1.2.14",
+    "apollo-link-ws": "^1.0.20",
+    "body-parser": "^1.19.0",
+    "core-js": "^3.6.5",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.11.0",
+    "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.19",
     "nuxt": "^2.13.0",
-    "typescript": "^3.9.6"
+    "subscriptions-transport-ws": "^0.9.17",
+    "token": "^0.1.0",
+    "typescript": "^3.9.6",
+    "vuelidate": "^0.7.5",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

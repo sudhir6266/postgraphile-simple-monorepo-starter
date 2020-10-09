@@ -1,9 +1,10 @@
-import { postgraphile } from 'postgraphile';
+import { postgraphile, makePluginHook } from 'postgraphile';
 import pgSimplifyInflector from "@graphile-contrib/pg-simplify-inflector";
 import {PostGraphileOptions} from "postgraphile/build/interfaces";
 import { IncomingMessage } from 'http';
 // @ts-ignore
 import ConnectionFilterPlugin from 'postgraphile-plugin-connection-filter';
+import PgPubSub from '@graphile/pg-pubsub';
 
 const pgSettings = function (req: IncomingMessage) {
     const settings: {'role'?: string, 'user.role'?: string, 'user.email'?: string} = {role: 'anonymous', 'user.role': 'anonymous'};
@@ -19,8 +20,13 @@ const pgSettings = function (req: IncomingMessage) {
     return settings;
 }
 
+const pluginHook = makePluginHook([PgPubSub]);
+
 const devOptions: PostGraphileOptions = {
+    pluginHook,
     subscriptions: true,
+    simpleSubscriptions: true,
+    websocketMiddlewares: [],
     watchPg: true,
     dynamicJson: true,
     setofFunctionsContainNulls: false,
@@ -38,10 +44,14 @@ const devOptions: PostGraphileOptions = {
     enableQueryBatching: true,
     legacyRelations: "omit",
     pgSettings,
+
 };
 
 const productionOptions: PostGraphileOptions = {
+    pluginHook,
     subscriptions: true,
+    simpleSubscriptions: true,
+    websocketMiddlewares: [],
     retryOnInitFail: true,
     dynamicJson: true,
     setofFunctionsContainNulls: false,
