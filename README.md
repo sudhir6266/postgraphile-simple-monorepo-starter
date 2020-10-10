@@ -35,5 +35,4 @@ For instance, here is some exemple of commands you might have to use often :
 
 # TODO
 
-- Add worker support
 - Add production configuration
