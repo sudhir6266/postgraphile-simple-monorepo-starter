@@ -1,9 +1,13 @@
+// @ts-ignore
 import { postgraphile, makePluginHook } from 'postgraphile';
-import pgSimplifyInflector from "@graphile-contrib/pg-simplify-inflector";
-import {PostGraphileOptions} from "postgraphile/build/interfaces";
+// @ts-ignore
+import pgSimplifyInflector from '@graphile-contrib/pg-simplify-inflector';
+// @ts-ignore
+import {PostGraphileOptions} from 'postgraphile/build/interfaces';
 import { IncomingMessage } from 'http';
 // @ts-ignore
 import ConnectionFilterPlugin from 'postgraphile-plugin-connection-filter';
+// @ts-ignore
 import PgPubSub from '@graphile/pg-pubsub';
 
 const pgSettings = function (req: IncomingMessage) {
@@ -25,7 +29,7 @@ const pluginHook = makePluginHook([PgPubSub]);
 const devOptions: PostGraphileOptions = {
     pluginHook,
     subscriptions: true,
-    simpleSubscriptions: true,
+    simpleSubscriptions: false,
     websocketMiddlewares: [],
     watchPg: true,
     dynamicJson: true,
@@ -50,7 +54,7 @@ const devOptions: PostGraphileOptions = {
 const productionOptions: PostGraphileOptions = {
     pluginHook,
     subscriptions: true,
-    simpleSubscriptions: true,
+    simpleSubscriptions: false,
     websocketMiddlewares: [],
     retryOnInitFail: true,
     dynamicJson: true,
