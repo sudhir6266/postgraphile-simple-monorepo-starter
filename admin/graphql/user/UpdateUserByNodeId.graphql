@@ -1,0 +1,11 @@
+mutation UpdateUserByNodeId($nodeId: ID!, $email: EmailAdress, $password: String, $role: UserRole) {
+  updateUserByNodeId(input: {nodeId: $nodeId, patch: {email: $email, password: $password, role: $role}}) {
+    user {
+      id,
+      nodeId,
+      email,
+      password,
+      role
+    }
+  }
+}

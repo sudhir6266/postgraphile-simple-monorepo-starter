@@ -627,7 +627,6 @@ input UserFilter {
 
 """An input for mutations affecting `User`"""
 input UserInput {
-  id: Int
   email: EmailAdress!
   password: String!
   role: UserRole
@@ -635,7 +634,6 @@ input UserInput {
 
 """Represents an update to a `User`. Fields that are set will be updated."""
 input UserPatch {
-  id: Int
   email: EmailAdress
   password: String
   role: UserRole

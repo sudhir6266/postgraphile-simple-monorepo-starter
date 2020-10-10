@@ -26,14 +26,17 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchUsers({ commit }, { itemsPerPage, offset, orderBy }) {
+  async fetchUsers({ commit }, { itemsPerPage, offset, orderBy, filter }) {
+    filter = filter ? `%${filter}%` : '%'
     const { data } = await this.app.apolloProvider.defaultClient.query({
       query: UsersList,
       variables: {
         offset: offset || 0,
         itemsPerPage: itemsPerPage || 25,
         orderBy: orderBy || 'PRIMARY_KEY_ASC',
+        emailFilter: filter,
       },
+      fetchPolicy: 'network-only',
     })
     commit('setUsers', data.users.nodes)
     commit('setTotalCount', data.users.totalCount)

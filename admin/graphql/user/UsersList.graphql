@@ -1,5 +1,5 @@
-query UsersList($itemsPerPage: Int, $offset: Int, $orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]) {
-  users(first: $itemsPerPage, offset: $offset, orderBy: $orderBy) {
+query UsersList($itemsPerPage: Int, $offset: Int, $orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC], $emailFilter: EmailAdress) {
+  users(first: $itemsPerPage, offset: $offset, orderBy: $orderBy, filter: {or: [{email: {likeInsensitive: $emailFilter}}]}) {
     nodes {
       id
       email

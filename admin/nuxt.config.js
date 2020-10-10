@@ -37,6 +37,10 @@ export default {
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
   ],
+  colorMode: {
+    preference: 'system',
+    fallback: 'light',
+  },
   modules: ['@nuxtjs/apollo', '@nuxtjs/proxy'],
   apollo: {
     clientConfigs: {

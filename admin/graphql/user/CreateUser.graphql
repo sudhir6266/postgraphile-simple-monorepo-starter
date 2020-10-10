@@ -1,0 +1,10 @@
+mutation CreateUser($email: EmailAdress!, $role: UserRole!, $password: String!) {
+  createUser(input: {user: {email: $email, role: $role, password: $password}}) {
+    user {
+      id,
+      nodeId,
+      email,
+      role
+    }
+  }
+}
