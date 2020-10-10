@@ -95,6 +95,20 @@ services:
       - nginx
     expose: ['3001']
 
+  worker:
+    image: "node:12"
+    restart: "always"
+    working_dir: /usr/app
+    environment:
+      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
+    volumes:
+      - ./worker:/usr/app
+      - /usr/app/node_modules
+      - ./docker/wait-postgresql:/usr/scripts
+    command:  bash -c "yarn && /usr/scripts/wait && yarn run start"
+    networks:
+      - nginx
+
   nginx:
     networks:
       - nginx

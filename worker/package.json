@@ -1,0 +1,13 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "Schedule task with postgresql queries",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "graphile-worker": "^0.8.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
