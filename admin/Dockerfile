@@ -3,8 +3,8 @@ FROM node:12
 ENV NUXT_HOST 0.0.0.0
 ENV NUXT_PORT 3000
 
-WORKDIR /anais-coletta-coaching-client
-ADD . /anais-coletta-coaching-client/
+WORKDIR /admin-client
+ADD . /admin-client/
 
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends apt-utils dialog curl apt-transport-https lsb-release git bash-completion iproute2 procps sudo

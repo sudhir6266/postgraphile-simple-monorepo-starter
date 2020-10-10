@@ -1,5 +1,5 @@
 {
-  "name": "anais-coletta-coaching-admin",
+  "name": "admin-client",
   "version": "1.0.0",
   "scripts": {
     "dev": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3001 nuxt",

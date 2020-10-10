@@ -1,5 +1,5 @@
 {
-  "name": "anais-coletta-coaching-api",
+  "name": "database-migrations",
   "version": "1.0.0",
   "description": "Backend for Anaïs Coletta Coaching website",
   "main": "index.ts",
