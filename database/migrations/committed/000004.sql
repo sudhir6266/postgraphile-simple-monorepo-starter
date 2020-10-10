@@ -1,7 +1,5 @@
---! Previous: sha1:179c9107e634ff6f4e5e5fe738a6ae3a5aa5772b
---! Hash: sha1:15c509bb9affd807ac6c1ae60e8ae3abbd65bf47
-
--- Enter migration here
+--! Previous: sha1:f7f0d28539621c03f4733ed6d3bd841ae8fe6815
+--! Hash: sha1:0da1b9a46f16f3bf71f60ff8fcc54570800c116e
 
 -- Fixes for trigger encrypt_password : Error code are not real error code
 CREATE OR REPLACE FUNCTION encrypt_password() RETURNS TRIGGER AS

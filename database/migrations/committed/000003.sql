@@ -1,7 +1,27 @@
 --! Previous: sha1:74859192eed2a153b678d3017ae283a5c634c448
---! Hash: sha1:179c9107e634ff6f4e5e5fe738a6ae3a5aa5772b
+--! Hash: sha1:f7f0d28539621c03f4733ed6d3bd841ae8fe6815
 
--- Enter migration here
+-- CREATE ROLES
+DO $$
+    BEGIN
+        CREATE ROLE anonymous nologin;
+        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating role anonymous it already exists';
+    end;
+$$;
+
+DO $$
+    BEGIN
+        CREATE ROLE "user" nologin;
+        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating role user it already exists';
+    end;
+$$;
+
+DO $$
+    BEGIN
+        CREATE ROLE admin nologin;
+        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating admin anonymous it already exists';
+    end;
+$$;
 
 -- DROP
 DROP FUNCTION IF EXISTS public.register;
@@ -68,27 +88,6 @@ CREATE FUNCTION public.current_user_email() RETURNS text AS $$
 $$ language SQL STABLE SECURITY DEFINER;
 
 UPDATE public.user SET role = 'admin' WHERE email = 'admin@admin.com';
-
-DO $$
-    BEGIN
-        CREATE ROLE anonymous nologin;
-        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating role anonymous it already exists';
-    end;
-$$;
-
-DO $$
-    BEGIN
-        CREATE ROLE "user" nologin;
-        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating role user it already exists';
-    end;
-$$;
-
-DO $$
-    BEGIN
-        CREATE ROLE admin nologin;
-        EXCEPTION WHEN DUPLICATE_OBJECT THEN RAISE NOTICE 'Not creating admin anonymous it already exists';
-    end;
-$$;
 
 GRANT SELECT ON public.user TO admin;
 GRANT DELETE ON public.user TO admin;
