@@ -101,6 +101,8 @@ services:
     working_dir: /usr/app
     environment:
       DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
+      WAIT_HOSTS: database:5432
+      WAIT_HOSTS_TIMEOUT: 300
     volumes:
       - ./worker:/usr/app
       - /usr/app/node_modules
