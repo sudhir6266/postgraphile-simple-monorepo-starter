@@ -31,6 +31,7 @@ const devOptions: PostGraphileOptions = {
     subscriptions: true,
     simpleSubscriptions: false,
     websocketMiddlewares: [],
+    retryOnInitFail: true,
     watchPg: true,
     dynamicJson: true,
     setofFunctionsContainNulls: false,
@@ -65,7 +66,7 @@ const productionOptions: PostGraphileOptions = {
     appendPlugins: [pgSimplifyInflector],
     graphiql: false,
     enableQueryBatching: true,
-    disableQueryLog: true, // our default logging has performance issues, but do make sure you have a logging system in place!
+    disableQueryLog: true,
     legacyRelations: "omit",
     pgSettings,
 }
