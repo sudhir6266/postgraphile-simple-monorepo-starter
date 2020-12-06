@@ -22,8 +22,8 @@
     }
   },
   "dependencies": {
-    "@nuxt/typescript-runtime": "^0.4.10",
-    "@nuxtjs/apollo": "^4.0.1-rc.3",
+    "@nuxt/typescript-runtime": "^2.0.0",
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.11.0",
     "@nuxtjs/proxy": "^2.0.1",
     "@vue/cli-shared-utils": "^4.4.6",

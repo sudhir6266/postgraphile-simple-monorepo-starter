@@ -2,7 +2,7 @@ version: '3'
 
 services:
   database:
-    image: "postgres"
+    image: "postgres:13"
     restart: "always"
     environment:
       POSTGRES_USER: ${DATABASE_USER}
@@ -17,8 +17,8 @@ services:
       - nginx
     expose: ['5432']
 
-  migrate-watch:
-    image: "node:12"
+  api:
+    image: "node:14"
     restart: "always"
     working_dir: /usr/app
     depends_on:
@@ -27,24 +27,6 @@ services:
       DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
       SHADOW_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${SHADOW_DATABASE}"
       ROOT_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/postgres"
-      WAIT_HOSTS: database:5432
-      WAIT_HOSTS_TIMEOUT: 300
-    volumes:
-      - ./database:/usr/app
-      - /usr/app/node_modules
-      - ./docker/wait-postgresql:/usr/scripts
-    networks:
-      - nginx
-    command:  bash -c "yarn && /usr/scripts/wait && yarn run migrate && yarn run migrate-shadow && yarn run migrate-watch"
-
-  api:
-    image: "node:12"
-    restart: "always"
-    working_dir: /usr/app
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
       PORT: 3002
       APP_ENV: dev
       WAIT_HOSTS: database:5432
@@ -56,15 +38,17 @@ services:
     expose: ['3002']
     networks:
       - nginx
-    command:  bash -c "yarn && /usr/scripts/wait && yarn start:watch"
+    command:  bash -c "yarn && /usr/scripts/wait && yarn run migrate && yarn run migrate:shadow && yarn dev"
 
   webapp:
-    image: "node:12"
+    image: "node:14"
     restart: "always"
     working_dir: /usr/app
     environment:
       - NUXT_HOST=0.0.0.0
       - NUXT_PORT=3000
+      - "API_HTTP_URL=http://localhost:${API_PORT}"
+      - "API_WS_URL=ws://localhost:${API_PORT}"
     volumes:
       - ./client:/usr/app
       - /usr/app/node_modules
@@ -76,7 +60,7 @@ services:
     expose: ['3000']
 
   admin:
-    image: "node:12"
+    image: "node:14"
     restart: "always"
     working_dir: /usr/app
     environment:
@@ -95,29 +79,13 @@ services:
       - nginx
     expose: ['3001']
 
-  worker:
-    image: "node:12"
-    restart: "always"
-    working_dir: /usr/app
-    environment:
-      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${MAIN_DATABASE}"
-      WAIT_HOSTS: database:5432
-      WAIT_HOSTS_TIMEOUT: 300
-    volumes:
-      - ./worker:/usr/app
-      - /usr/app/node_modules
-      - ./docker/wait-postgresql:/usr/scripts
-    command:  bash -c "yarn && /usr/scripts/wait && yarn run start"
-    networks:
-      - nginx
-
   nginx:
     networks:
       - nginx
     image: nginx:alpine
     ports:
-      - 9000:9000
-      - 9001:9001
+      - 9100:9100
+      - 9101:9101
       - "${API_PORT}:${API_PORT}"
     volumes:
       - ./docker/nginx/dev/nginx.conf:/etc/nginx/nginx.conf
