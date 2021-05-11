@@ -36,7 +36,7 @@
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "nuxt": "^2.13.0",
     "subscriptions-transport-ws": "^0.9.17",
     "token": "^0.1.0",
